@@ -2,14 +2,33 @@ package main
 
 import (
 	"encoding/json"
+	"flag"
 	"fmt"
 	"os"
 	"time"
 )
 
 func main() {
-	parser := NewQuakeLogParser()
-	events, err := parser.Parse("games.log")
+
+	filePath := flag.String("file", "", "path to the log file")
+
+	flag.Parse()
+
+	if filePath == nil {
+		panic("you must provide a file path")
+	}
+
+	if filePath != nil && *filePath == "" {
+		panic("you must provide a file path")
+	}
+
+	file, err := os.OpenFile(*filePath, os.O_RDONLY, 0)
+	if err != nil {
+		panic(err)
+	}
+	defer file.Close()
+
+	events, err := ParseLog(file)
 	if err != nil {
 		panic(err)
 	}

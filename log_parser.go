@@ -3,20 +3,11 @@ package main
 import (
 	"bufio"
 	"fmt"
-	"os"
+	"io"
 )
 
-type QuakeLogParser struct {
-}
-
-func (p *QuakeLogParser) Parse(filePath string) ([]Event, error) {
-	file, err := os.OpenFile(filePath, os.O_RDONLY, 0)
-	if err != nil {
-		return nil, err
-	}
-	defer file.Close()
-
-	scanner := bufio.NewScanner(file)
+func ParseLog(logfile io.Reader) ([]Event, error) {
+	scanner := bufio.NewScanner(logfile)
 	events := make([]Event, 0)
 	for scanner.Scan() {
 		line := scanner.Text()
@@ -29,8 +20,4 @@ func (p *QuakeLogParser) Parse(filePath string) ([]Event, error) {
 	}
 
 	return events, nil
-}
-
-func NewQuakeLogParser() *QuakeLogParser {
-	return &QuakeLogParser{}
 }
