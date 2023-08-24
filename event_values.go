@@ -11,7 +11,7 @@ func getEventValue(eventType EventType, parts []string) (any, error) {
 	switch eventType {
 	case InitGame:
 		return NewInitGameValue(parts)
-	case ExitGame:
+	case Exit:
 		return NewExitGameValue(parts)
 	case ShutdownGame:
 		return NewShutdownGameValue(parts)
@@ -36,8 +36,8 @@ func getEventValue(eventType EventType, parts []string) (any, error) {
 // and returning the event value
 
 type ClientUserinfoChangedValue struct {
-	clientID int
-	userInfo map[string]string
+	ClientID int
+	UserInfo map[string]string
 }
 
 func NewClientUserinfoChangedValue(parts []string) (ClientUserinfoChangedValue, error) {
@@ -54,13 +54,13 @@ func NewClientUserinfoChangedValue(parts []string) (ClientUserinfoChangedValue, 
 	}
 
 	return ClientUserinfoChangedValue{
-		clientID: clientID,
-		userInfo: userInfo,
+		ClientID: clientID,
+		UserInfo: userInfo,
 	}, nil
 }
 
 type ClientDisconnectValue struct {
-	clientID int
+	ClientID int
 }
 
 func NewClientDisconnectValue(parts []string) (ClientDisconnectValue, error) {
@@ -70,12 +70,12 @@ func NewClientDisconnectValue(parts []string) (ClientDisconnectValue, error) {
 	}
 
 	return ClientDisconnectValue{
-		clientID: clientID,
+		ClientID: clientID,
 	}, nil
 }
 
 type ClientBeginValue struct {
-	clientID int
+	ClientID int
 }
 
 func NewClientBeginValue(parts []string) (ClientBeginValue, error) {
@@ -85,7 +85,7 @@ func NewClientBeginValue(parts []string) (ClientBeginValue, error) {
 	}
 
 	return ClientBeginValue{
-		clientID: clientID,
+		ClientID: clientID,
 	}, nil
 }
 
@@ -97,8 +97,8 @@ func NewShutdownGameValue(parts []string) (ShutdownGameValue, error) {
 }
 
 type ItemValue struct {
-	itemID   int
-	itemName string
+	ItemID   int
+	ItemName string
 }
 
 func NewItemValue(parts []string) (ItemValue, error) {
@@ -108,13 +108,13 @@ func NewItemValue(parts []string) (ItemValue, error) {
 	}
 
 	return ItemValue{
-		itemID:   itemID,
-		itemName: parts[1],
+		ItemID:   itemID,
+		ItemName: parts[1],
 	}, nil
 }
 
 type ClientConnectValue struct {
-	clientID int
+	ClientID int
 }
 
 func NewClientConnectValue(parts []string) (ClientConnectValue, error) {
@@ -124,22 +124,22 @@ func NewClientConnectValue(parts []string) (ClientConnectValue, error) {
 	}
 
 	return ClientConnectValue{
-		clientID: clientID,
+		ClientID: clientID,
 	}, nil
 }
 
 type ExitGameValue struct {
-	reason string
+	Reason string
 }
 
 func NewExitGameValue(parts []string) (ExitGameValue, error) {
 	return ExitGameValue{
-		reason: strings.Join(parts, " "),
+		Reason: strings.Join(parts, " "),
 	}, nil
 }
 
 type InitGameValue struct {
-	settings map[string]string
+	Settings map[string]string
 }
 
 func NewInitGameValue(parts []string) (InitGameValue, error) {
@@ -154,17 +154,17 @@ func NewInitGameValue(parts []string) (InitGameValue, error) {
 	}
 
 	return InitGameValue{
-		settings: settings,
+		Settings: settings,
 	}, nil
 }
 
 type KillValue struct {
-	killerID       int
-	killerName     string
-	victimID       int
-	victimName     string
-	deathCauseID   int
-	deathCauseName string
+	KillerID       int
+	KillerName     string
+	VictimID       int
+	VictimName     string
+	DeathCauseID   int
+	DeathCauseName string
 }
 
 func NewKillValue(parts []string) (KillValue, error) {
@@ -184,11 +184,11 @@ func NewKillValue(parts []string) (KillValue, error) {
 	}
 
 	return KillValue{
-		killerID:       killerID,
-		killerName:     parts[3],
-		victimID:       victimID,
-		victimName:     parts[4],
-		deathCauseID:   deathCauseID,
-		deathCauseName: parts[5],
+		KillerID:       killerID,
+		KillerName:     parts[3],
+		VictimID:       victimID,
+		VictimName:     parts[4],
+		DeathCauseID:   deathCauseID,
+		DeathCauseName: parts[5],
 	}, nil
 }

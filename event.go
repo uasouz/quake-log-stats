@@ -11,7 +11,7 @@ type EventType int
 const (
 	TimeStamp EventType = iota + 1
 	InitGame
-	ExitGame
+	Exit
 	ShutdownGame
 	ClientConnect
 	ClientUserinfoChanged
@@ -27,7 +27,7 @@ func (t EventType) String() string {
 	return [...]string{
 		"TimeStamp",
 		"InitGame",
-		"ExitGame",
+		"Exit",
 		"ShutdownGame",
 		"ClientConnect",
 		"ClientUserinfoChanged",
@@ -56,8 +56,8 @@ func getEventType(value string) EventType {
 	switch strings.TrimSuffix(value, ":") {
 	case "InitGame":
 		return InitGame
-	case "ExitGame":
-		return ExitGame
+	case "Exit":
+		return Exit
 	case "ShutdownGame":
 		return ShutdownGame
 	case "ClientConnect":
