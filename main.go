@@ -48,6 +48,9 @@ func main() {
 	if err != nil {
 		panic(err)
 	}
+
+	fmt.Println(fmt.Sprintf("Reports saved to file %s", outputFile.Name()))
+	fmt.Println("Done!")
 }
 
 func saveReportsToJSONFile(reports map[string]MatchReport, outputFile *os.File) error {
