@@ -17,6 +17,7 @@ func TestParseLine(t *testing.T) {
 		"14:11 ShutdownGame:",
 		"14:11 ------------------------------------------------------------",
 		"13:55 Exit: Fraglimit hit.",
+		" 21:10 ClientDisconnect: 2",
 	}
 
 	expectedEvents := []Event{
@@ -70,6 +71,7 @@ func TestParseLine(t *testing.T) {
 		{timestamp: 851, tokenType: ShutdownGame, value: ShutdownGameValue{}},
 		{timestamp: 851, tokenType: divider, value: nil},
 		{timestamp: 835, tokenType: Exit, value: ExitGameValue{Reason: "Fraglimit hit."}},
+		{timestamp: 1270, tokenType: ClientDisconnect, value: ClientDisconnectValue{ClientID: 2}},
 	}
 
 	for i, line := range linesToTest {
