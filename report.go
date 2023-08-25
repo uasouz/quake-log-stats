@@ -51,7 +51,7 @@ func renderReport(data map[string]MatchData) (string, error) {
 func printMatchesReport(data map[string]MatchData) {
 	for matchID, matchData := range data {
 		fmt.Println("------------------------------------------------")
-		fmt.Println(fmt.Sprintf("Match %s", matchID))
+		fmt.Println(fmt.Sprintf("Match %s", strings.TrimPrefix(matchID, "game_")))
 		fmt.Println(fmt.Sprintf("Total kills: %d", matchData.TotalKills))
 		fmt.Println("Players:")
 		for _, player := range matchData.Players {
