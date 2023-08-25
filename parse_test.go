@@ -66,7 +66,7 @@ func TestParseLine(t *testing.T) {
 				"tl":         "0",
 			}}},
 		{timestamp: 108, tokenType: Item, value: ItemValue{ItemID: 4, ItemName: "ammo_rockets"}},
-		{timestamp: 124, tokenType: Kill, value: KillValue{KillerID: 1022, VictimID: 2, DeathCauseID: 19, DeathCauseName: "MOD_FALLIN"}},
+		{timestamp: 124, tokenType: Kill, value: KillValue{KillerID: 1022, VictimID: 2, MeanOfDeathID: 19, MeanOfDeathName: "MOD_FALLIN"}},
 		//{timestamp: 835, tokenType: Score, value: ScoreValue{score: 6, ping: 19, ClientID: 7, clientName: "Mal"}},
 		{timestamp: 851, tokenType: ShutdownGame, value: ShutdownGameValue{}},
 		{timestamp: 851, tokenType: divider, value: nil},

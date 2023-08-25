@@ -72,12 +72,8 @@ func readAndAggregateEvents(events []Event) map[string]MatchReport {
 			gameID++
 			match = NewMatch(gameID)
 			matches = append(matches, match)
-		case ClientUserinfoChanged:
-			eventValue := event.value.(ClientUserinfoChangedValue)
-			match.AddPlayer(eventValue.ClientID, eventValue.UserInfo["n"])
-		case Kill:
-			eventValue := event.value.(KillValue)
-			match.AddKill(eventValue.KillerID, eventValue.VictimID)
+		case ClientUserinfoChanged, Kill:
+			match.AggregateEvent(event)
 		case ShutdownGame:
 			reports[fmt.Sprintf("game_%d", gameID)] = match.Report()
 		}

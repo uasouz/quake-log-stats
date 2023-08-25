@@ -1,6 +1,7 @@
 package main
 
 import (
+	"regexp"
 	"strconv"
 	"strings"
 )
@@ -159,13 +160,15 @@ func NewInitGameValue(parts []string) (InitGameValue, error) {
 }
 
 type KillValue struct {
-	KillerID       int
-	KillerName     string
-	VictimID       int
-	VictimName     string
-	DeathCauseID   int
-	DeathCauseName string
+	KillerID        int
+	KillerName      string
+	VictimID        int
+	VictimName      string
+	MeanOfDeathID   int
+	MeanOfDeathName string
 }
+
+var killInfoRegex = regexp.MustCompile(`(.*) killed (.*) by (\w*)`)
 
 func NewKillValue(parts []string) (KillValue, error) {
 	killerID, err := strconv.Atoi(parts[0])
@@ -183,12 +186,16 @@ func NewKillValue(parts []string) (KillValue, error) {
 		return KillValue{}, err
 	}
 
+	killInfo := strings.Trim(strings.Join(parts[3:], " "), " ")
+
+	killInfoParts := killInfoRegex.FindAllStringSubmatch(killInfo, -1)
+
 	return KillValue{
-		KillerID:       killerID,
-		KillerName:     parts[3],
-		VictimID:       victimID,
-		VictimName:     parts[4],
-		DeathCauseID:   deathCauseID,
-		DeathCauseName: parts[5],
+		KillerID:        killerID,
+		KillerName:      killInfoParts[0][1],
+		VictimID:        victimID,
+		VictimName:      killInfoParts[0][2],
+		MeanOfDeathID:   deathCauseID,
+		MeanOfDeathName: killInfoParts[0][3],
 	}, nil
 }
