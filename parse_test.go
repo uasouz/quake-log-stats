@@ -2,6 +2,8 @@ package main
 
 import (
 	"encoding/json"
+	"os"
+	"path/filepath"
 	"testing"
 )
 
@@ -103,5 +105,37 @@ func TestParseLine(t *testing.T) {
 		if string(eventJSON) != string(expectedEventJSON) {
 			t.Errorf("Event %d does not match expected event. Expected: %v, got: %v", i, expectedEvents[i], event)
 		}
+	}
+}
+
+func TestParseLog(t *testing.T) {
+	path, err := filepath.Abs("games.log")
+
+	if err != nil {
+		panic(err)
+	}
+
+	reports, err := readFileAndGenerateReports(path)
+
+	if err != nil {
+		t.Errorf("Error while parsing log file: %v", err)
+		return
+	}
+
+	// save reports to JSON file in tmp dir
+
+	outputFile, err := os.OpenFile(filepath.Join(t.TempDir(), "reports.json"), os.O_CREATE|os.O_WRONLY, 0644)
+
+	if err != nil {
+		t.Errorf("Error while opening output file: %v", err)
+		return
+	}
+	defer outputFile.Close()
+
+	err = saveReportsToJSONFile(reports, outputFile)
+
+	if err != nil {
+		t.Errorf("Error while saving reports to JSON file: %v", err)
+		return
 	}
 }

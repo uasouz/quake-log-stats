@@ -22,18 +22,11 @@ func main() {
 		panic("you must provide a file path")
 	}
 
-	file, err := os.OpenFile(*filePath, os.O_RDONLY, 0)
+	reports, err := readFileAndGenerateReports(*filePath)
+
 	if err != nil {
 		panic(err)
 	}
-	defer file.Close()
-
-	events, err := ParseLog(file)
-	if err != nil {
-		panic(err)
-	}
-
-	reports := readAndAggregateEvents(events)
 
 	// save reports to JSON file
 	outputFile, err := os.OpenFile(fmt.Sprintf("reports_%d.json", time.Now().Unix()), os.O_CREATE|os.O_WRONLY, 0644)
@@ -41,6 +34,7 @@ func main() {
 	if err != nil {
 		panic(err)
 	}
+
 	defer outputFile.Close()
 
 	err = saveReportsToJSONFile(reports, outputFile)
@@ -51,6 +45,21 @@ func main() {
 
 	fmt.Println(fmt.Sprintf("Reports saved to file %s", outputFile.Name()))
 	fmt.Println("Done!")
+}
+
+func readFileAndGenerateReports(filePath string) (map[string]MatchReport, error) {
+	file, err := os.OpenFile(filePath, os.O_RDONLY, 0)
+	if err != nil {
+		return nil, err
+	}
+	defer file.Close()
+
+	events, err := ParseLog(file)
+	if err != nil {
+		return nil, err
+	}
+
+	return readAndAggregateEvents(events), nil
 }
 
 func saveReportsToJSONFile(reports map[string]MatchReport, outputFile *os.File) error {
