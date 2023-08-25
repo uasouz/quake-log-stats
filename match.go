@@ -10,10 +10,7 @@ type Match struct {
 	KillsByMeansOfDeath map[string]int
 }
 
-func (m *Match) Report() {
-
-}
-
+// AggregateEvent will aggregate the event into the match
 func (m *Match) AggregateEvent(event Event) {
 	switch event.tokenType {
 	case ClientUserinfoChanged:
@@ -26,6 +23,8 @@ func (m *Match) AggregateEvent(event Event) {
 	}
 }
 
+// AddKill will add a kill to the match
+// It will also update the total kills and the kills by means of death
 func (m *Match) AddKill(kill KillValue) {
 	m.TotalKills++
 	m.KillsByMeansOfDeath[kill.MeanOfDeathName]++
@@ -39,6 +38,8 @@ func (m *Match) AddKill(kill KillValue) {
 	m.Kills[kill.KillerID]++
 }
 
+// AddPlayer will add a player to the match
+// It will also initialize the player kills to 0
 func (m *Match) AddPlayer(playerID int, player string) {
 	if player == "<world>" {
 		return
@@ -66,6 +67,7 @@ type MatchData struct {
 	KillsByMeansOfDeath map[string]int `json:"kills_by_means"`
 }
 
+// FormatData will format the match data to be used in the report
 func (m *Match) FormatData() MatchData {
 	data := MatchData{
 		TotalKills:          m.TotalKills,

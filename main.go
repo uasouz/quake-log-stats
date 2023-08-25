@@ -45,6 +45,7 @@ func main() {
 
 	fmt.Println(fmt.Sprintf("Matches data saved to file %s", outputFile.Name()))
 
+	// render report and save to HTML file
 	reportFileName, err := renderReport(matchesData)
 
 	if err != nil {
@@ -53,6 +54,7 @@ func main() {
 
 	fmt.Println(fmt.Sprintf("Report saved to file %s", reportFileName))
 
+	// print report to stdout
 	printMatchesReport(matchesData)
 }
 
@@ -77,6 +79,10 @@ func saveMatchesDataToJSONFile(data map[string]MatchData, outputFile *os.File) e
 	return encoder.Encode(data)
 }
 
+// readAndAggregateEvents reads the events and aggregates them by match
+// the events are read in order, so we can assume that the first event is InitGame
+// and the last event is ShutdownGame
+// the meaningful events in between are ClientUserinfoChanged and Kill
 func readAndAggregateEvents(events []Event) map[string]MatchData {
 	gameID := 0
 	matches := make([]*Match, 0)

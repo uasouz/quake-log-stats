@@ -33,15 +33,20 @@ func ParseLine(line string) (Event, error) {
 			fmt.Println("Recovered in f", r)
 		}
 	}()
+
+	// in order to parse the line we split it into parts
 	parts := strings.Split(strings.Trim(line, " "), " ")
 
+	// the first part is the timestamp
 	eventTimeStamp, err := parseTimeStamp(parts[0])
 	if err != nil {
 		return Event{}, err
 	}
 
+	// the second part is the event type
 	eventType := getEventType(parts[1])
 
+	// the rest of the parts are the event value, which depends on the event type
 	eventValue, err := getEventValue(eventType, parts[2:])
 
 	if err != nil {
