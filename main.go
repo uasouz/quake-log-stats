@@ -53,7 +53,7 @@ func main() {
 
 	fmt.Println(fmt.Sprintf("Report saved to file %s", reportFileName))
 
-	fmt.Println("Done!")
+	printMatchesReport(matchesData)
 }
 
 func readFileAndGenerateData(filePath string) (map[string]MatchData, error) {

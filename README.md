@@ -1,11 +1,24 @@
 # Quake Log Stats 
 
+![Preview](preview.png)
+
 ## Description
-This program consists of a CLI that parses a Quake 3 Arena log file and generates a report with the following information for each game:
+This program consists of a CLI that parses a Quake 3 Arena log file and generates a data file with the following information for each game:
 - Total kills
 - Players
 - Kills by means
 - Kills by players
+
+and a report in HTML format with the following information for each game:
+- Total kills
+- Players
+- Kills by means
+- Kills by players
+- Players ranking based on kills
+
+You can find samples of the generated files in the `samples` folder.
+
+The report will also be printed in the terminal.
 
 ## How to run
 

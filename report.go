@@ -47,3 +47,24 @@ func renderReport(data map[string]MatchData) (string, error) {
 
 	return fileName, reportTemplate.ExecuteTemplate(reportFile, "report.gohtml", data)
 }
+
+func printMatchesReport(data map[string]MatchData) {
+	for matchID, matchData := range data {
+		fmt.Println("------------------------------------------------")
+		fmt.Println(fmt.Sprintf("Match %s", matchID))
+		fmt.Println(fmt.Sprintf("Total kills: %d", matchData.TotalKills))
+		fmt.Println("Players:")
+		for _, player := range matchData.Players {
+			fmt.Println(fmt.Sprintf("\t%s: %d", player, matchData.Kills[player]))
+		}
+		fmt.Println("Kills by means of death:")
+		for meanOfDeath, kills := range matchData.KillsByMeansOfDeath {
+			fmt.Println(fmt.Sprintf("\t%s: %d", meanOfDeath, kills))
+		}
+		fmt.Println("Ranking:")
+		for i, player := range rankMapByValues(matchData.Kills) {
+			fmt.Println(fmt.Sprintf("\t%d. %s: %d", i+1, player, matchData.Kills[player]))
+		}
+		fmt.Println()
+	}
+}
