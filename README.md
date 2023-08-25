@@ -9,6 +9,33 @@ This program consists of a CLI that parses a Quake 3 Arena log file and generate
 - Kills by means
 - Kills by players
 
+Example:
+```json
+{
+    "total_kills": 3,
+    "players": [
+      "Oootsimo",
+      "Dono da Bola",
+      "Assasinu Credi",
+      "Zeh",
+      "Mal",
+      "Isgalamido"
+    ],
+    "kills": {
+      "Assasinu Credi": 0,
+      "Dono da Bola": 2,
+      "Isgalamido": 0,
+      "Mal": 0,
+      "Oootsimo": 1,
+      "Zeh": 0
+    },
+    "kills_by_means": {
+      "MOD_ROCKET": 1,
+      "MOD_ROCKET_SPLASH": 2
+    }
+  }
+```
+
 and a report in HTML format with the following information for each game:
 - Total kills
 - Players
