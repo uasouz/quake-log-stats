@@ -1,3 +1,4 @@
 .idea
-reports_*.json
+matches_data_*.json
+report_*.html
 reports/

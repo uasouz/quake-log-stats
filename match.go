@@ -1,9 +1,5 @@
 package main
 
-import (
-	"encoding/json"
-)
-
 // Match represents a Quake match
 // It will aggregate all the kills and players
 type Match struct {
@@ -12,6 +8,10 @@ type Match struct {
 	Players             map[int]string
 	Kills               map[int]int
 	KillsByMeansOfDeath map[string]int
+}
+
+func (m *Match) Report() {
+
 }
 
 func (m *Match) AggregateEvent(event Event) {
@@ -30,7 +30,9 @@ func (m *Match) AddKill(kill KillValue) {
 	m.TotalKills++
 	m.KillsByMeansOfDeath[kill.MeanOfDeathName]++
 	if kill.KillerID == 1022 {
-		m.Kills[kill.VictimID]--
+		if m.Kills[kill.VictimID] > 0 {
+			m.Kills[kill.VictimID]--
+		}
 		return
 	}
 
@@ -57,15 +59,15 @@ func NewMatch(id int) *Match {
 	}
 }
 
-type MatchReport struct {
+type MatchData struct {
 	TotalKills          int            `json:"total_kills"`
 	Players             []string       `json:"players"`
 	Kills               map[string]int `json:"kills"`
 	KillsByMeansOfDeath map[string]int `json:"kills_by_means"`
 }
 
-func (m *Match) Report() MatchReport {
-	report := MatchReport{
+func (m *Match) FormatData() MatchData {
+	data := MatchData{
 		TotalKills:          m.TotalKills,
 		Players:             make([]string, 0),
 		Kills:               make(map[string]int),
@@ -73,22 +75,14 @@ func (m *Match) Report() MatchReport {
 	}
 
 	for _, player := range m.Players {
-		report.Players = append(report.Players, player)
+		data.Players = append(data.Players, player)
 	}
 
 	for playerID, kills := range m.Kills {
-		report.Kills[m.Players[playerID]] = kills
+		data.Kills[m.Players[playerID]] = kills
 	}
 
-	return report
-}
-
-type Matches []*Match
-
-func (m Matches) String() string {
-	s, _ := json.Marshal(m)
-
-	return string(s)
+	return data
 }
 
 type MeanOfDeath int

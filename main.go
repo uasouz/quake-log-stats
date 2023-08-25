@@ -22,14 +22,14 @@ func main() {
 		panic("you must provide a file path")
 	}
 
-	reports, err := readFileAndGenerateReports(*filePath)
+	matchesData, err := readFileAndGenerateData(*filePath)
 
 	if err != nil {
 		panic(err)
 	}
 
-	// save reports to JSON file
-	outputFile, err := os.OpenFile(fmt.Sprintf("reports_%d.json", time.Now().Unix()), os.O_CREATE|os.O_WRONLY, 0644)
+	// save matchesData to JSON file
+	outputFile, err := os.OpenFile(fmt.Sprintf("matches_data_%d.json", time.Now().Unix()), os.O_CREATE|os.O_WRONLY, 0644)
 
 	if err != nil {
 		panic(err)
@@ -37,17 +37,26 @@ func main() {
 
 	defer outputFile.Close()
 
-	err = saveReportsToJSONFile(reports, outputFile)
+	err = saveMatchesDataToJSONFile(matchesData, outputFile)
 
 	if err != nil {
 		panic(err)
 	}
 
-	fmt.Println(fmt.Sprintf("Reports saved to file %s", outputFile.Name()))
+	fmt.Println(fmt.Sprintf("Matches data saved to file %s", outputFile.Name()))
+
+	reportFileName, err := renderReport(matchesData)
+
+	if err != nil {
+		panic(err)
+	}
+
+	fmt.Println(fmt.Sprintf("Report saved to file %s", reportFileName))
+
 	fmt.Println("Done!")
 }
 
-func readFileAndGenerateReports(filePath string) (map[string]MatchReport, error) {
+func readFileAndGenerateData(filePath string) (map[string]MatchData, error) {
 	file, err := os.OpenFile(filePath, os.O_RDONLY, 0)
 	if err != nil {
 		return nil, err
@@ -62,17 +71,17 @@ func readFileAndGenerateReports(filePath string) (map[string]MatchReport, error)
 	return readAndAggregateEvents(events), nil
 }
 
-func saveReportsToJSONFile(reports map[string]MatchReport, outputFile *os.File) error {
+func saveMatchesDataToJSONFile(data map[string]MatchData, outputFile *os.File) error {
 	encoder := json.NewEncoder(outputFile)
 	encoder.SetIndent("", "  ")
-	return encoder.Encode(reports)
+	return encoder.Encode(data)
 }
 
-func readAndAggregateEvents(events []Event) map[string]MatchReport {
+func readAndAggregateEvents(events []Event) map[string]MatchData {
 	gameID := 0
 	matches := make([]*Match, 0)
 
-	reports := make(map[string]MatchReport)
+	matchesData := make(map[string]MatchData)
 
 	var match *Match
 	for _, event := range events {
@@ -84,9 +93,9 @@ func readAndAggregateEvents(events []Event) map[string]MatchReport {
 		case ClientUserinfoChanged, Kill:
 			match.AggregateEvent(event)
 		case ShutdownGame:
-			reports[fmt.Sprintf("game_%d", gameID)] = match.Report()
+			matchesData[fmt.Sprintf("game_%d", gameID)] = match.FormatData()
 		}
 	}
 
-	return reports
+	return matchesData
 }

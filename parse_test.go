@@ -115,16 +115,16 @@ func TestParseLog(t *testing.T) {
 		panic(err)
 	}
 
-	reports, err := readFileAndGenerateReports(path)
+	matchesData, err := readFileAndGenerateData(path)
 
 	if err != nil {
 		t.Errorf("Error while parsing log file: %v", err)
 		return
 	}
 
-	// save reports to JSON file in tmp dir
+	// save matches data to JSON file in tmp dir
 
-	outputFile, err := os.OpenFile(filepath.Join(t.TempDir(), "reports.json"), os.O_CREATE|os.O_WRONLY, 0644)
+	outputFile, err := os.OpenFile(filepath.Join(t.TempDir(), "matchesData.json"), os.O_CREATE|os.O_WRONLY, 0644)
 
 	if err != nil {
 		t.Errorf("Error while opening output file: %v", err)
@@ -132,10 +132,10 @@ func TestParseLog(t *testing.T) {
 	}
 	defer outputFile.Close()
 
-	err = saveReportsToJSONFile(reports, outputFile)
+	err = saveMatchesDataToJSONFile(matchesData, outputFile)
 
 	if err != nil {
-		t.Errorf("Error while saving reports to JSON file: %v", err)
+		t.Errorf("Error while saving matchesData to JSON file: %v", err)
 		return
 	}
 }

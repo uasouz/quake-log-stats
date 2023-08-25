@@ -7,8 +7,8 @@ import (
 	"testing"
 )
 
-func TestMatchReport(t *testing.T) {
-	t.Run("Test MatchReport", func(t *testing.T) {
+func TestMatchData(t *testing.T) {
+	t.Run("Test MatchData", func(t *testing.T) {
 		match := NewMatch(1)
 
 		match.AggregateEvent(Event{
@@ -45,15 +45,15 @@ func TestMatchReport(t *testing.T) {
 			match.AggregateEvent(generateKillEvent(i*60 + rand.Intn(60)))
 		}
 
-		matchReport := match.Report()
+		matchData := match.FormatData()
 
-		matchReportJSON, err := json.Marshal(matchReport)
+		matchDataJSON, err := json.Marshal(matchData)
 
 		if err != nil {
-			t.Errorf("Error marshaling matchReport: %v", err)
+			t.Errorf("Error marshaling matchData: %v", err)
 		}
 
-		fmt.Println(string(matchReportJSON))
+		fmt.Println(string(matchDataJSON))
 
 	})
 }
